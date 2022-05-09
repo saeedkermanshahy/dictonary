@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+
+    <title>
+      {% if src_text %}
+        {{src_text}}
+      {% elif result.text %}
+        {{result.text}}
+      {% else %}
+        Translator
+      {% endif %}
+    </title>
+  </head>
+  <body>
+    <div class="container mt-5">
+      <form method="get">
+        {{form.as_p}}
+        <button type="submit" class="btn btn-primary">Translate</button>
+      </form>
+      <p class="mt-5">
+        {% if linguee %}
+          {% if status_code != 200 %}
+            <p> Error Occured While Fetching Translation </p>
+            STATUS CODE {{status_code}}
+          {% elif result == False %}
+            No Translation Found
+          {% else %}
+          <h3> Source Word </h3>
+          <p> Featured <span class="badge bg-info text-dark"> {{result.featured}} </span> </p>
+          <p> Text <span class="badge bg-info text-dark"> {{result.text}} </span> </p>
+          <p> Pos <span class="badge bg-info text-dark"> {{result.pos}} </span> </p>
+          <p> Grammar Info <span class="badge bg-info text-dark"> {{result.grammar_info}} </span> </p>
+          <h3> Destination Word </h3>
+          <ul class="list-group">
+            {% for translation in result.translations %}
+              <li class="list-group-item"> 
+                <p> Featured <span class="badge bg-info text-dark"> {{translation.featured}} </span> </p>
+                <p> Text <span class="badge bg-info text-dark"> {{translation.text}} </span> </p>
+                <p> Pos <span class="badge bg-info text-dark"> {{translation.pos}} </span> </p>
+                
+                <h4> Examples </h4>
+                <ul class="list-group list-group-flush">
+                  {% for example in translation.examples %}
+                    <li class="list-group-item">
+                      <p> SRC <span class="badge bg-info text-dark"> {{example.src}} </span> </p>
+                      <p> DST <span class="badge bg-info text-dark"> {{example.dst}} </span> </p>
+                    </li>
+                  {% endfor %}
+                </ul>
+              </li>
+            {% endfor %}
+          </ul>
+          {% endif %}
+          {% else %}
+          Translation: <span class="badge bg-info text-dark">{{result}}</span>
+        {% endif %}
+      </p>
+    </div>
+
+    <!-- Optional JavaScript; choose one of the two! -->
+
+    <!-- Option 1: Bootstrap Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+
+    <!-- Option 2: Separate Popper and Bootstrap JS -->
+    <!--
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js" integrity="sha384-7+zCNj/IqJ95wo16oMtfsKbZ9ccEh31eOz1HGyDuCQ6wgnyJNSYdrPa03rtR1zdB" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.min.js" integrity="sha384-QJHtvGhmr9XOIpI6YVutG+2QOK9T+ZnN4kzFN1RtK3zEFEIsxhlmWl5/YESvpZ13" crossorigin="anonymous"></script>
+    -->
+  </body>
+</html>
